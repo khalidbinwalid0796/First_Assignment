@@ -27,5 +27,7 @@ Route::group([
 
     Route::post('login', 'Api\AuthController@login');
     Route::post('signup', 'Api\AuthController@signup');
-
+    Route::post('user', 'Api\AuthController@user');
 });
+
+

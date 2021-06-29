@@ -13,29 +13,32 @@ use App\User;
 class AuthController extends Controller
 {
     public function login(Request $request){
-        $userInfo = User::where('email','=', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if(!$userInfo){
-            return back()->with('fail','We do not recognize your email address');
-        }else{
-            //check password
-            if(Hash::check($request->password, $userInfo->password)){
-                //$request->session()->put('LoggedUser', $userInfo->id);
-                return response()->json(['message' => 'Successfully Loggin']);
-            }else{
-                return back()->with('fail','Incorrect password');
-            }
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            return response([
+                'message'=>"successfully registration",
+                'user'=>$user
+            ]);
         }
     }
 
     public function signup(Request $request){
-        $data=array();
-        $data['name']=$request->name;
-        $data['email']=$request->email;
-        $data['password'] = Hash::make($request->password);
-        $data['api_token'] = Str::random(80);
-        DB::table('users')->insert($data);
 
-        return response()->json(['message' => 'Successfully Registered']);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'api_token' => Str::random(80),
+        ]);
+        return response([
+            'message'=>"successfully registration",
+            'user'=>$user
+        ]);
+    }
+
+    public function user(Request $request){
+        return Auth::user();
     }
 }

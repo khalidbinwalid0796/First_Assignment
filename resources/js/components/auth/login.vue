@@ -39,7 +39,7 @@
 </template>
 
 <script type="text/javascript">
- export default { 
+ export default {
    data(){
     return {
       form:{
@@ -53,7 +53,17 @@
   methods:{
     login(){
       axios.post('/api/auth/login',this.form)
-      this.$router.push({ name : 'home'})
+      .then((response)=> {
+            //console.log('res',response.data.user.api_token);
+              let token = response.data.user.api_token;
+              let uname = response.data.user.name;
+              let email = response.data.user.email;
+              localStorage.setItem('token',token);
+              localStorage.setItem('name',uname);
+              localStorage.setItem('email',email);
+              this.$router.push({ name : 'home'})
+          })
+
       .catch(error => this.errors = error.response.data.errors)
     }
   }

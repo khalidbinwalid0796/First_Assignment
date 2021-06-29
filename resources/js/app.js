@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 //router imported
 import {routes} from './routes';
 
-window.Reload = new Vue();
+//window.Reload = new Vue();
 
 const router = new VueRouter({
   routes,
